@@ -1,39 +1,36 @@
-import React, { Component } from 'react';
-import Keycloak from 'keycloak-js';
+import React from 'react';
+// import axios from '../utils/api';
 
 class Welcome extends React.Component<any,any> {
-  state = {  }
+  state = { name: '', email: '', sub: '', email_verified: false, expiration:'', error:'' }
+
+  componentDidMount(){
+    const {keycloak} = this.props;
+    keycloak.loadUserInfo()
+      .success( (info:any) => this.setState(info))
+      .error( () => this.setState({error: 'Failed to load user info'}) );;
+
+    keycloak.loadUserProfile()
+      .success( (userInfo:any) => this.setState(userInfo) )
+      .error( () => this.setState({error: 'Failed to load user profile'}) );
+
+    //axios.get('http://localhost:8080/auth/admin/realms/master/roles').then(console.log)
+  }
   render() {
-    return <h1>Hello, {this.props.name}</h1>;
+    const {keycloak} = this.props;
+    return <>
+      <h1>Hello, {this.props.name}</h1>
+      <div className="UserInfo">
+        <p>ID: {this.state.sub}</p>
+        <p>Name: {this.state.name}</p>
+        <p>Email: {this.state.email}</p>
+        <p>email_verified: {String(this.state.email_verified)}</p>
+        <p>{this.state.expiration}</p>
+        <p>Token Expires in: {Math.round(keycloak.tokenParsed.exp + keycloak.timeSkew - new Date().getTime() / 1000)} seconds</p>
+        <p>Refresh Token Expires in: {Math.round(keycloak.refreshTokenParsed.exp + keycloak.timeSkew - new Date().getTime() / 1000)} seconds</p>
+        <pre>{JSON.stringify(this.state,null,4)}</pre>
+      </div>
+    </>;
   }
 }
 export default Welcome;
-
-/*
-class Secured extends Component <any:any>{
-
-    const   state = { keycloak: null, authenticated: false }
-
-  componentDidMount() {
-    const keycloak = Keycloak('/keycloak.json');
-    keycloak.init({onLoad: 'login-required'}).then(authenticated => {
-      this.setState({ keycloak: keycloak, authenticated: authenticated })
-    })
-  }
-
-  render() {
-    if (this.state.keycloak) {
-      if (this.state.authenticated) return (
-        <div>
-          <p>This is a Keycloak-secured component of your application. You shouldn't be able
-          to see this unless you've authenticated with Keycloak.</p>
-        </div>
-      ); else return (<div>Unable to authenticate!</div>)
-    }
-    return (
-      <div>Initializing Keycloak...</div>
-    );
-  }
-}
-export default Secured;
-*/
