@@ -2,11 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
+declare let window: any;
 
-ReactDOM.render(<App />, document.getElementById('root'));
+window.keycloak.init({
+  checkLoginIframe: true,
+  checkLoginIframeInterval: 60 * 60 * 5,
+  onLoad: 'login-required',
+}).success( (authenticated:any) => {
+    console.log(authenticated ? 'authenticated' : 'not authenticated');
+    ReactDOM.render(<App kc={window.keycloak}/>, document.getElementById('root'));
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+}).error(() =>{
+    alert('failed to initialize keycloak app');
+});
+
