@@ -1,13 +1,10 @@
 
 import KcAdminClient from 'keycloak-admin';
 import faker from 'faker';
-
 declare let window: any;
 const keycloak = window.keycloak;
 
-
-
- const fakeUser = () => ({
+export const fakeUser = () => ({
   username: faker.internet.userName(),
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName(),
@@ -37,6 +34,9 @@ const service = () => {
     return { users, groups, roles, clients }
   }
 
+
+
+
   return {
     // create: kcAdminClient.users.create,
     // find: kcAdminClient.users.find,
@@ -50,6 +50,7 @@ const service = () => {
     users: kcAdminClient.users,
     createUsers,
     fetchAll,
+    fakeUser,
   }
 }
 

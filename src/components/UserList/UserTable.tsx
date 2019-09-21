@@ -1,13 +1,18 @@
 import React from 'react';
 import UserRepresentation from 'keycloak-admin/lib/defs/userRepresentation';
+import {ToggleEnabled, ToggleEmailVerified} from './UserToggler';
 
-export default ({users}:any) => (<>
-  <div className="container">
+
+
+export default ({users, adm, fetchUsers, del}:any) => (<>
+  <div className="container-fluid">
     <h4>{users.length}</h4>
 
-    <table className="table table-dark table-hover table-sm table-responsive-md">
+    <table className="table table-dark table-hover table-sm table-striped">
       <thead>
         <tr>
+          <th>enabled</th>
+          <th>verified</th>
           <th>username</th>
           <th>Email</th>
           <th>Name</th>
@@ -17,13 +22,19 @@ export default ({users}:any) => (<>
       <tbody>
         {users && users.map( (user: UserRepresentation) => (
           <tr key={user.id}>
+            <td>
+              <ToggleEnabled user={user} adm={adm} fetchUsers={fetchUsers}/>
+            </td>
+            <td>
+              <ToggleEmailVerified user={user} adm={adm} fetchUsers={fetchUsers}/>
+            </td>
             <td>{user.username}</td>
             <td>{user.email}</td>
             <td>{user.firstName} {user.lastName}</td>
             <td>
-              <button className="btn btx-sm btn-success"><i className="fa fa-cog" /></button>
+              <button onClick={fetchUsers} className="btn btx-sm btn-success"><i className="fa fa-cog " /></button>
               &nbsp;
-              <button className="btn btx-sm btn-danger"><i className="fa fa-trash" /></button>
+              <button onClick={() => del(user.id)} className="btn btx-sm btn-danger"><i className="fa fa-trash" /></button>
             </td>
           </tr>
         ))}

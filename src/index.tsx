@@ -28,5 +28,5 @@ keycloak.onTokenExpired = () => {
   });
 }
 
-// keycloak.onAuthSuccess = function() { alert('authenticated'); }
-// keycloak.onAuthRefreshSuccess = function() { alert('onAuthRefreshSuccess'); }
+keycloak.onAuthSuccess = function() { console.info('authenticated'); }
+keycloak.onAuthRefreshSuccess = function() { console.info('onAuthRefreshSuccess'); }
