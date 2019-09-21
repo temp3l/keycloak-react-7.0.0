@@ -2,11 +2,63 @@ import React from 'react'
 import useForm from 'react-hook-form'
 import Toggle from '../toggle';
 import faker from 'faker';
+const actions = [ 'VERIFY_EMAIL', 'UPDATE_PROFILE','CONFIGURE_TOTP','UPDATE_PASSWORD', ];
+
+const ActionSelect = ({handleActionChange}:any) => {
+    return (
+    <>
+        <table className="table-responsive table-sm">
+            <tbody>
+                <tr>
+                    <td>
+                        <label className="switch">
+                            <input type="checkbox" name="VERIFY_EMAIL" onChange={handleActionChange} />
+                            <span className="slider round"></span>
+                        </label>
+                    </td>
+                    <td>VERIFY_EMAIL</td>
+                    <td className="smallHelp">'Verify email' sends an email to the user to verify their email address.</td>
+                </tr>
+                <tr>
+                    <td>
+                        <label className="switch">
+                            <input type="checkbox" name="UPDATE_PROFILE" onChange={handleActionChange} />
+                            <span className="slider round"></span>
+                        </label>
+                    </td>
+                    <td>UPDATE_PROFILE</td>
+                    <td className="smallHelp">'Update profile' requires user to enter in new personal information. </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label className="switch">
+                            <input type="checkbox" name="UPDATE_PASSWORD" onChange={handleActionChange} />
+                            <span className="slider round"></span>
+                        </label>
+                    </td>
+                    <td>UPDATE_PASSWORD</td>
+                    <td className="smallHelp">'Update password' requires user to enter in a new password.</td>
+                </tr>
+                <tr>
+                    <td>
+                        <label className="switch">
+                            <input type="checkbox" name="CONFIGURE_TOTP" onChange={handleActionChange} />
+                            <span className="slider round"></span>
+                        </label>
+                    </td>
+                    <td>CONFIGURE_TOTP</td>
+                    <td className="smallHelp">'Configure OTP' requires setup of a mobile password generator.</td>
+                </tr>
+            </tbody>
+        </table>
+    </>)
+}
 
 export const StackedUserForm = ({adm}:any) => {
     const [emailVerified, toggleVerified] = React.useState(false);
     const [enabled, toggleEnabled] = React.useState(true);
-    const { register, handleSubmit, watch, errors } = useForm({defaultValues: adm.fakeUser() });
+    const {register, handleSubmit } = useForm({defaultValues: adm.fakeUser() });
+    const [requiredActions, setActions] = React.useState<String[]>([])
 
     const onSubmit = async (data:any) => {
         const payload = Object.assign({}, data, {emailVerified, enabled});
@@ -22,6 +74,17 @@ export const StackedUserForm = ({adm}:any) => {
         }
     }
 
+    const handleActionChange = (event:any) => {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+
+        if(value === true && requiredActions.indexOf(name) === -1) return setActions( [...requiredActions, name] );
+        setActions( requiredActions.filter(action => action !== name));
+        // console.log(name, value, requiredActions.indexOf(name));
+    }
+
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} role="form">
 
@@ -31,7 +94,7 @@ export const StackedUserForm = ({adm}:any) => {
                     <input ref={register} name="firstName" type="text" className="form-control"  placeholder="First name" required/>
                 </div>
                 <div className="col-md-6 mb-3">
-                <label>Last name</label>
+                    <label>Last name</label>
                     <input ref={register} name="lastName" type="text" className="form-control" placeholder="Last name"  required/>
                 </div>
             </div>
@@ -54,36 +117,39 @@ export const StackedUserForm = ({adm}:any) => {
                 </div>
             </div>
 
+            <br/>
 
-            <div className="form-group">
-                <button onClick={ (e) => {toggleVerified(!emailVerified); e.preventDefault() } }
-                    className={emailVerified === true ? "btn btn-sm btn-success" : "btn btn-sm btn-danger"}>
-                    { emailVerified === true ?  <i className="fa fa-2x fa-envelope" /> : <i className="fa fa-2x fa-envelope" /> }
-                </button>
-                <label> &nbsp; Email {emailVerified===false ? 'not' : ''} Verified</label>
+            <div className="form-row">
+                <div className="col-md-6 mb-3" style={{paddingLeft:10}}>
+                    <div className="form-row">
+                        <div className="form-group">
+                            <button onClick={ (e) => {toggleVerified(!emailVerified); e.preventDefault() } }
+                                className={emailVerified === true ? "btn btn-sm btn-success" : "btn btn-sm btn-danger"}>
+                                { emailVerified === true ?  <i className="fa fa-1x fa-envelope" /> : <i className="fa fa-1x fa-envelope" /> }
+                            </button>
+                            <label> &nbsp; Email {emailVerified===false ? 'not' : ''} Verified</label>
+                        </div>
+                    </div>
+                    <div className="form-row">
+                        <div className="form-group">
+                            <button onClick={ (e) => {toggleEnabled(!enabled); e.preventDefault() } }
+                                className={enabled === true ? "btn btn-sm btn-success" : "btn btn-sm btn-danger"}>
+                                { enabled === true ?  <i className="fa fa-1x fa-toggle-on" /> : <i className="fa fa-1x fa-toggle-off" /> }
+                            </button>
+                            <label> &nbsp; User {enabled===false ? 'Disabled' : 'Enabled'}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="col-md-6 mb-3">
+                    <ActionSelect handleActionChange={handleActionChange}/>
+                </div>
             </div>
-
-            <div className="form-group">
-                <button onClick={ (e) => {toggleEnabled(!enabled); e.preventDefault() } }
-                    className={enabled === true ? "btn btn-sm btn-success" : "btn btn-sm btn-danger"}>
-                    { enabled === true ?  <i className="fa fa-2x fa-toggle-on" /> : <i className="fa fa-2x fa-toggle-off" /> }
-                </button>
-                <label> &nbsp; User {enabled===false ? 'Disabled' : 'Enabled'}</label>
-            </div>
-
-            <div className="dropdown">
-  <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Dropdown button
-  </button>
-  <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a className="dropdown-item" href="#">Action</a>
-    <a className="dropdown-item" href="#">Another action</a>
-    <a className="dropdown-item" href="#">Something else here</a>
-  </div>
-</div>
-
 
             <button className="btn btn-primary" type="submit">Submit form</button>
+
+            <small>{requiredActions.join(' ,')}</small>
+
         </form>
     )
 }
