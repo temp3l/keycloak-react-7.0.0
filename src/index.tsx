@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import { BrowserRouter, Route, Link } from 'react-router-dom';
 
 declare let window: any;// read: https://github.com/dasniko/keycloak-reactjs-demo/blob/master/src/index.js
 const keycloak = window.keycloak

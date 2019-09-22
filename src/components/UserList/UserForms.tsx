@@ -2,6 +2,7 @@ import React from 'react'
 import useForm from 'react-hook-form'
 import Toggle from '../toggle';
 import faker from 'faker';
+
 const actions = [ 'VERIFY_EMAIL', 'UPDATE_PROFILE','CONFIGURE_TOTP','UPDATE_PASSWORD', ];
 
 const ActionSelect = ({handleActionChange}:any) => {

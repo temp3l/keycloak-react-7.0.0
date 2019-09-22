@@ -1,23 +1,26 @@
 import React from 'react';
-// import axios from '../utils/api';
+import AdmContext from '../admContext';
+declare let window: any;
 
 class Welcome extends React.Component<any,any> {
   state = { name: '', email: '', sub: '', email_verified: false, expiration:'', error:'' }
+  static contextType = AdmContext
 
   componentDidMount(){
-    const {keycloak} = this.props;
-    keycloak.loadUserInfo()
+
+    console.log(this.context.users)
+    window.keycloak.loadUserInfo()
       .success( (info:any) => this.setState(info))
       .error( () => this.setState({error: 'Failed to load user info'}) );;
 
-    keycloak.loadUserProfile()
+    window.keycloak.loadUserProfile()
       .success( (userInfo:any) => this.setState(userInfo) )
       .error( () => this.setState({error: 'Failed to load user profile'}) );
 
     //axios.get('http://localhost:8080/auth/admin/realms/master/roles').then(console.log)
   }
   render() {
-    const {keycloak} = this.props;
+    const keycloak = window.keycloak;
     return <>
       <h1>Hello, {this.props.name}</h1>
       <div className="UserInfo">

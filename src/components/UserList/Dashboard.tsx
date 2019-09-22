@@ -1,15 +1,19 @@
 import React from 'react';
 import UserTable from './UserTable';
-import { StackedUserForm} from './UserForms';
+import AdminService from '../../utils/adminService';
+import AdmContext from '../../admContext';
 
 declare let window: any;
 
 class Welcome extends React.Component<any,any> {
-  state = { users: [],   }
+  state = { users: [], adm: AdminService(), loading:false  }
+  static contextType = AdmContext
 
   fetchUsers = async () => {
-    const users = await this.props.adm.users.find({max:-1});
-    this.setState({users}); // TODO: handle error!
+    this.setState({loading:true})
+    const users = await this.state.adm.users.find({max:-1});
+    this.context.updpateUsers(users);
+    this.setState({loading:false})
   }
 
   componentDidMount = () => this.fetchUsers();
@@ -17,42 +21,28 @@ class Welcome extends React.Component<any,any> {
   del = async (id:string) => {
     if(id === window.keycloak.tokenParsed.sub) return alert('we need you!')
     try {
-      await this.props.adm.users.del({id});
+      await this.state.adm.users.del({id});
       this.setState({ users: this.state.users.filter( (user:any) => user.id !== id)})
     } catch(e){
       alert(e);
       this.fetchUsers();
     }
-
   }
 
   render() {
-    const {users,} = this.state;
-    const {adm} = this.props;
+    const {adm, users} = this.context;
 
     const userTableProps = {
-      adm, users,
+      adm,
       fetchUsers: this.fetchUsers,
       del: this.del
     }
-
     return <>
-      <div className="UserList">
-
-
-
-
-        <div className="container">
-          <StackedUserForm adm={adm}/>
-        </div>
-
-        <br/><br/><br/>
-
-        <UserTable {...userTableProps} />
-        <pre>{JSON.stringify(this.state,null,4)}</pre>
-      </div>
+      <UserTable {...userTableProps} />
     </>;
   }
 }
 // <button onClick={adm.createUsers} className="btn btn-sm btn-success">fake 100 Users</button>
+// <pre>{JSON.stringify(this.state,null,4)}</pre>
+
 export default Welcome;

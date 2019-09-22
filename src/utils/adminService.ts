@@ -51,6 +51,7 @@ const service = () => {
     createUsers,
     fetchAll,
     fakeUser,
+    foo: 'LAAAAAAAAAAAAAAAAAAAX'
   }
 }
 
