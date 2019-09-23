@@ -10,10 +10,10 @@ class Welcome extends React.Component<any,any> {
   static contextType = AdmContext
 
   fetchUsers = async () => {
-    this.setState({loading:true})
+    this.setState({loading:true});
     const users = await this.state.adm.users.find({max:-1});
     this.context.updpateUsers(users);
-    this.setState({loading:false})
+    this.setState({loading:false});
   }
 
   componentDidMount = () => this.fetchUsers();
@@ -30,7 +30,7 @@ class Welcome extends React.Component<any,any> {
   }
 
   render() {
-    const {adm, users} = this.context;
+    const {adm} = this.context;
 
     const userTableProps = {
       adm,

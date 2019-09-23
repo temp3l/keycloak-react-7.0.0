@@ -6,18 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="Web site created using create-react-app"/>
-    <link rel="apple-touch-icon" href="logo192.png" />
 
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css" integrity="sha256-zmfNZmXoNWBMemUOo1XUGFfc0ihGGLYdgtJS3KCr/l0=" crossorigin="anonymous" />
     <title>React App</title>
-    <script src="http://localhost:8080/auth/js/keycloak.js"></script>
+   
+    <script src="http://10.50.2.103:8080/auth/js/keycloak.js"></script>
     <script>
-      window.baseURL = 'http://localhost:8080/auth';
+      window.baseURL = 'http://10.50.2.103:8080/auth';
       window.keycloak = Keycloak({
-        "realm": "master",
+        "realm": "assona",
         "auth-server-url": window.baseURL,
         "ssl-required": "external",
         "clientId": "react-client",
@@ -27,9 +26,25 @@
     </script>
   </head>
   <body>
-
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
 
+    <!--
+      <link rel="apple-touch-icon" href="logo192.png" />
+
+      https://lists.jboss.org/pipermail/keycloak-user/2018-October/016022.html
+
+      Let's assume your realm (non-master) is named "foo". Here are the steps:
+        1. In admin console, go to master realm -> clients -> broker -> Credentials, copy the secret;
+        2. go to foo realm -> Identity Providers, add Keycloak OpenID Connect provider, give it an alias (like "master");
+        3. set Client ID to "broker" (w/o quotes) and paste the Client Secret;
+        4. scroll down to "Import from URL", paste the following:
+        http://localhost:8180/auth/realms/master/.well-known/openid-configuration
+        and click Import. The necessary fields will be filled in automatically;
+        5. scroll up, copy Redirect URI (should be like http://localhost:8180/auth/realms/foo/broker/master/endpoint);
+        6. go to master realm -> clients -> broker, paste the URI to "Valid Redirect URIs", click save.
+
+        After that, your users will be able authenticate on non-master realms via the master realm. Upon the first successful login, the user will be presented with the Update Account Information form. If you want to bypass that, you can enable identity auto-linking.
+    -->
   </body>
 </html>

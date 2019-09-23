@@ -11,12 +11,15 @@ export const fakeUser = () => ({
   email: faker.internet.email(),
   emailVerified: faker.random.boolean(),
   enabled: faker.random.boolean(), // enabled required to be true in order to send actions email
+  requiredActions: [],
 });
 
 
 const service = () => {
   const kcAdminClient = new KcAdminClient({ baseUrl: window.baseURL, });
+  kcAdminClient.setConfig({ realmName: 'assona', });
   kcAdminClient.setAccessToken(keycloak.token);
+  
   keycloak.onAuthRefreshSuccess = () => {
     console.log('refreshin kyAdmins token');
     kcAdminClient.setAccessToken(keycloak.token);
@@ -34,19 +37,7 @@ const service = () => {
     return { users, groups, roles, clients }
   }
 
-
-
-
   return {
-    // create: kcAdminClient.users.create,
-    // find: kcAdminClient.users.find,
-    // findOne: kcAdminClient.users.findOne,
-    // update: kcAdminClient.users.update,
-    // del: kcAdminClient.users.del,
-    // executeActionsEmail: kcAdminClient.users.executeActionsEmail,
-    // listGroups: kcAdminClient.users.listGroups,
-    // resetPassword: kcAdminClient.users.resetPassword,
-    // sendVerifyEmail: kcAdminClient.users.sendVerifyEmail,
     users: kcAdminClient.users,
     createUsers,
     fetchAll,

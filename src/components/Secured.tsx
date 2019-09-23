@@ -8,7 +8,6 @@ class Welcome extends React.Component<any,any> {
 
   componentDidMount(){
 
-    console.log(this.context.users)
     window.keycloak.loadUserInfo()
       .success( (info:any) => this.setState(info))
       .error( () => this.setState({error: 'Failed to load user info'}) );;
@@ -17,7 +16,7 @@ class Welcome extends React.Component<any,any> {
       .success( (userInfo:any) => this.setState(userInfo) )
       .error( () => this.setState({error: 'Failed to load user profile'}) );
 
-    //axios.get('http://localhost:8080/auth/admin/realms/master/roles').then(console.log)
+      //axios.get('http://localhost:8080/auth/admin/realms/master/roles').then(console.log)
   }
   render() {
     const keycloak = window.keycloak;

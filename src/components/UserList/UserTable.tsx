@@ -3,6 +3,7 @@ import UserRepresentation from 'keycloak-admin/lib/defs/userRepresentation';
 import {ToggleEnabled, ToggleEmailVerified} from './UserToggler';
 //import { MyContext } from '../../App'
 import AdmContext from '../../admContext';
+import {A} from 'hookrouter';
 
 export default ({adm, fetchUsers, del}:any) => {
 
@@ -10,7 +11,6 @@ export default ({adm, fetchUsers, del}:any) => {
     <AdmContext.Consumer>
       {context => (
         <>
-        <small>{context.users.length}</small>
           <table className="table table-dark table-hover table-sm table-striped">
             <thead>
               <tr>
@@ -25,12 +25,13 @@ export default ({adm, fetchUsers, del}:any) => {
             <tbody>
               {context.users && context.users.map( (user: UserRepresentation) => (
                 <tr key={user.id}>
-                  <td>
+                 {/* <td>
                     <label className="switch">
                       <input type="checkbox" name="VERIFY_EMAIL" onChange={console.log} />
                       <span className="slider round"></span>
                     </label>
                   </td>
+                */}
                   <td>
                     <ToggleEnabled user={user} adm={adm} fetchUsers={fetchUsers}/>
                   </td>
@@ -41,7 +42,7 @@ export default ({adm, fetchUsers, del}:any) => {
                   <td>{user.email}</td>
                   <td>{user.firstName} {user.lastName}</td>
                   <td>
-                    <button onClick={fetchUsers} className="btn btx-sm btn-success"><i className="fa fa-cog " /></button>
+                    <A href={`/users/${user.id}`} className="btn btx-sm btn-success"><i className="fa fa-cog " /></A>
                     &nbsp;
                     <button onClick={() => del(user.id)} className="btn btx-sm btn-danger"><i className="fa fa-trash" /></button>
                   </td>
