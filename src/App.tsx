@@ -9,6 +9,12 @@ import { AdmProvider } from './admContext'
 import './App.css';
 declare let window: any;
 
+
+/*
+  required-actions needs role: query-users
+  findUsers needs role: manage-users
+  ['query-users', 'manage-users']
+*/
 const routes = {
   '/': () => <Dashboard />,
   '/secured': () => <Secured/>,
@@ -36,10 +42,6 @@ type State = Readonly<typeof initialState>;
 class App extends React.Component <any, any>{
   readonly state: State = initialState;
 
-  componentDidMount(){
-    // const adm = AdminService();
-    // this.setState({ adm  });
-  }
   render(){
     return (<>
       <AdmProvider value={this.state}>

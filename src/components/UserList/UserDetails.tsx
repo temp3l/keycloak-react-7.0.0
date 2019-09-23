@@ -17,9 +17,8 @@ export default ({id}:any) => {
         // required-actions needs role: query-users
         const availableActions = await api.get('http://10.50.2.103:8080/auth/admin/realms/assona/authentication/required-actions');
         console.log(availableActions);
-        // findUsers needs role: manage-users
         const response = await adm.users.findOne({id}); // returns all users if no id given => bug?
-        // console.log(response)
+        
         if(response && response.id){
           setUser(response);
         } else {
