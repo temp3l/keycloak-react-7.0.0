@@ -11,7 +11,7 @@ export default ({adm, fetchUsers, del}:any) => {
     <AdmContext.Consumer>
       {context => (
         <>
-          <table className="table table-dark table-hover table-sm table-striped">
+          <table className="table table-hover table-sm table-striped">
             <thead>
               <tr>
                 <th>enabled</th>

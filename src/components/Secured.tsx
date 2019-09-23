@@ -23,7 +23,7 @@ class Welcome extends React.Component<any,any> {
     return <>
       <h1>Hello, {this.props.name}</h1>
       <div className="UserInfo">
-        <p>ID: {this.state.sub}</p>
+        <p>userID: {this.state.sub}</p>
         <p>Name: {this.state.name}</p>
         <p>Email: {this.state.email}</p>
         <p>email_verified: {String(this.state.email_verified)}</p>
@@ -32,6 +32,10 @@ class Welcome extends React.Component<any,any> {
         <p>Refresh Token Expires in: {Math.round(keycloak.refreshTokenParsed.exp + keycloak.timeSkew - new Date().getTime() / 1000)} seconds</p>
         <pre>{JSON.stringify(this.state,null,4)}</pre>
       </div>
+      <br/>
+      <br/>
+      <h3>idTokenParsed</h3>
+      <pre>{JSON.stringify(window.keycloak.idTokenParsed,null,4)}</pre>
     </>;
   }
 }
